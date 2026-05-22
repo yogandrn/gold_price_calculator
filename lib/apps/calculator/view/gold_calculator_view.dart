@@ -19,7 +19,6 @@ class _GoldCalculatorViewState extends State<GoldCalculatorView> {
   @override
   void initState() {
     super.initState();
-    // Fetch harga emas pertama kali saat halaman dibuka
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<GoldCalculatorProvider>().fetchGoldPrice();
     });
@@ -33,11 +32,9 @@ class _GoldCalculatorViewState extends State<GoldCalculatorView> {
 
   @override
   Widget build(BuildContext context) {
-    // Membungkus halaman dengan Theme lokal berdasarkan state _isDarkMode
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // ── APP BAR & TOGGLE DARK MODE ────────────────────────────────
           Consumer<ThemeProvider>(
             builder: (context, themeProvider, child) {
               return SliverAppBar.large(
@@ -56,7 +53,7 @@ class _GoldCalculatorViewState extends State<GoldCalculatorView> {
               );
             },
           ),
-          // ── BODY: GOLD CALCULATOR LAYER ──────────────────────────────────
+
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -65,19 +62,14 @@ class _GoldCalculatorViewState extends State<GoldCalculatorView> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // 1. Kondisi Loading
+                      // on loading
                       if (provider.isLoading) ...[
                         const SizedBox(height: 40),
                         const Center(child: CircularProgressIndicator()),
                         const SizedBox(height: 16),
-                        Text(
-                          'Mengambil harga emas terbaru...',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
                       ],
 
-                      // 2. Kondisi Error
+                      // on error
                       if (provider.isError) ...[
                         _buildErrorCard(
                           provider.errorMessage,
@@ -85,7 +77,7 @@ class _GoldCalculatorViewState extends State<GoldCalculatorView> {
                         ),
                       ],
 
-                      // 3. Kondisi Success / Valid State
+                      // on success
                       if (provider.isSuccess || provider.goldPrice != null) ...[
                         _buildPriceInfoCard(provider),
                         const SizedBox(height: 12),

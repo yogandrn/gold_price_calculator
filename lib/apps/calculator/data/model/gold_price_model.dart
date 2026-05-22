@@ -1,4 +1,3 @@
-/// Model representasi response dari API harga emas.
 class GoldPriceModel {
   final int basePrice;
   final String currency;
